@@ -31,18 +31,6 @@ export class LinkedList {
         return node
     }
 
-    delete(node) {
-       if(node === null) return false
-       let previousNode = node.prev
-       let nextNode = node.next
-
-       previousNode.next = nextNode
-       nextNode.prev = previousNode
-       this.length--
-
-       return true
-    }
-
     insert(node, subject, amount) {
         if(node.next === null) return false
 
@@ -58,21 +46,46 @@ export class LinkedList {
         return true
     }
 
-    last() {
-        return this.tail
+    delete(node) {
+        if(node === null) return false
+        if(node.next === null  && node.prev === null) {
+        console.log("ALL was NULL")
+            this.head = null
+            this.tail = null
+        } else if(node.next === null) {
+        console.log("Next was NULL")
+            this.tail = node.prev
+            this.tail.next = null
+        } else if(node.prev === null) {
+        console.log("PREV was NULL")
+            this.head = node.next
+            this.head.prev = null
+        } else {
+        console.log("WE ARE IN THE MIDDLE")
+            let prevNode = node.prev
+            let nextNode = node.next
+            prevNode.next = nextNode
+            nextNode.prev = prevNode
+        }
+        this.length--
+        return true
     }
 
     first() {
         return this.head
     }
 
-    next(node) {
-        if(node.next === null) return this.head
-        return node.next 
-    }
-
     prev(node) {
         if(node.prev === null) return this.tail
         return node.prev
+    }
+
+    next(node) {
+       if(node.next === null) return this.head
+        return node.next 
+    }
+
+    last() {
+        return this.tail
     }
 }

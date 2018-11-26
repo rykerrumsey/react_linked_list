@@ -24,52 +24,21 @@ export class LinkedListComp extends React.Component {
         this.clearInputs();
     }
 
-    delete = () => {
-        const nextNode = this.currentNode.next
-       const success = this.ll.delete(this.currentNode)
-       if(success) {
-           this.currentNode = nextNode
-           this.setState({
-                subject: "",
-                amount: "",
-                node: this.formatNodeToString(this.currentNode)
-           })
-       } else {
-            console.error("ERROR could not delete node")
-       }
-       this.clearInputs()
-    }
+    add = () => {
+        if(this.currentNode === null) {
+            this.ll = new LinkedList(this.state.subject, this.state.amount)
+            this.currentNode = this.ll.first()
+        } else {
+            let newNode = this.ll.add(this.state.subject, this.state.amount)
+            this.currentNode = newNode
+        }
 
-    formatNodeToString = (node) => {
-        return `subject=${node.subject}, amount=${node.amount}`
-    }
-
-    first = () => {
-        this.currentNode = this.ll.first()
         this.setState({
-            node: this.formatNodeToString(this.currentNode)
-        })
-    }
-
-    last = () => {
-        this.currentNode = this.ll.last()
-        this.setState({
-            node: this.formatNodeToString(this.currentNode)
-        })
-    }
-
-    next = () => {
-        this.currentNode = this.ll.next(this.currentNode)
-        this.setState({
+            subject: "",
+            amount: "",
             node: this.formatNodeToString(this.currentNode) 
         })
-    }
-
-    prev = () => {
-        this.currentNode = this.ll.prev(this.currentNode)
-        this.setState({
-            node: this.formatNodeToString(this.currentNode)
-        })
+        this.clearInputs();
     }
 
     insert = () => {
@@ -87,14 +56,64 @@ export class LinkedListComp extends React.Component {
        this.clearInputs();
     }
 
-    add = () => {
-        let newNode = this.ll.add(this.state.subject, this.state.amount)
-        this.setState({
-            subject: "",
-            amount: "",
-            node: this.formatNodeToString(newNode) 
-        })
-        this.clearInputs();
+    delete = () => {
+        if(this.currentNode) {
+           const success = this.ll.delete(this.currentNode)
+            if(success) {
+                if(!this.currentNode.next)
+                    this.currentNode = this.currentNode.prev
+                else
+                    this.currentNode = this.currentNode.next
+               this.setState({
+                    node: this.formatNodeToString(this.currentNode)
+               })
+           } else {
+                console.error("ERROR could not delete node")
+           }
+        }
+    }
+
+    first = () => {
+        if(this.currentNode) {
+            this.currentNode = this.ll.first()
+            this.setState({
+                node: this.formatNodeToString(this.currentNode)
+            })
+        }
+    }
+
+    prev = () => {
+        if(this.currentNode) {
+            this.currentNode = this.ll.prev(this.currentNode)
+            this.setState({
+                node: this.formatNodeToString(this.currentNode)
+            })
+        }
+    }
+
+    next = () => {
+        if(this.currentNode) {
+            this.currentNode = this.ll.next(this.currentNode)
+            this.setState({
+                node: this.formatNodeToString(this.currentNode) 
+            })
+        }
+    }
+
+    last = () => {
+        if(this.currentNode) {
+            this.currentNode = this.ll.last()
+            this.setState({
+                node: this.formatNodeToString(this.currentNode)
+            })
+        }
+    }
+
+    formatNodeToString = (node) => {
+        if(node === null)
+            return 'null'
+        else
+            return `subject=${node.subject}, amount=${node.amount}`
     }
 
     clearInputs = () => {
